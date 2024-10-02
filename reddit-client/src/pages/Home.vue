@@ -1,0 +1,9 @@
+<script setup lang="ts">
+import AddSubreddit from "@/components/AddSubreddit.vue";
+import Subreddit from "@/components/Subreddit.vue";
+</script>
+
+<template>
+  <AddSubreddit />
+  <Subreddit />
+</template>
