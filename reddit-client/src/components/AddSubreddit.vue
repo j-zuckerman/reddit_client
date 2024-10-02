@@ -1,11 +1,26 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import Modal from "./Modal.vue";
+
+const isModalOpen = ref(false);
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
+</script>
 
 <template>
-  <button class="circular-button">+</button>
   <p>Add Subreddit</p>
+
+  <button @click="openModal" class="circular-button">+</button>
+  <Modal v-if="isModalOpen" @close="closeModal" />
 </template>
 
-<style>
+<style scoped>
 .circular-button {
   width: 50px;
   height: 50px;
