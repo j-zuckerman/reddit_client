@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { ref } from "vue";
+import { fetchData } from "@/composables/fetch";
+
+const subredditName = ref("");
 const emit = defineEmits(["close"]);
 
 function buttonClick() {
@@ -10,7 +14,12 @@ function buttonClick() {
   <div class="modal" @click.self="$emit('close')">
     <div class="modal-content">
       <span class="close" @click="$emit('close')">&times;</span>
-      <p>This is a modal!</p>
+
+      <p>Enter the name of subreddit</p>
+      <input type="text" v-model="subredditName" />
+      <button @click="fetchData(subredditName)">Add Subreddit</button>
+
+      <p>{{ subredditName }}</p>
     </div>
   </div>
 </template>
@@ -28,6 +37,7 @@ function buttonClick() {
   background-color: rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
+  color: black;
 }
 
 .modal-content {
