@@ -1,9 +1,11 @@
 <script setup lang="ts">
-//import { useFetch } from "../composables/fetch";
-
-//const { data, error } = useFetch("...");
+const props = defineProps(["post"]);
 </script>
 
 <template>
-  <p>Post Component</p>
+  <p>{{ props.post["title"] }}</p>
+  <p>{{ props.post["ups"] }}</p>
+  <p>{{ props.post["author"] }}</p>
+  <p>{{ props.post["text"] }}</p>
+  <p>{{ props.post["url"] }}</p>
 </template>

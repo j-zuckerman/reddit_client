@@ -1,7 +1,7 @@
-import type Post from "./posts";
+import type Subreddit from "./subreddit";
 
 export interface Store {
-  data: Post | null;
+  data: Subreddit[];
   error: string | null;
   loading: boolean;
 }
