@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <p>Loading...</p>
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
 </template>
 
 <style scoped></style>

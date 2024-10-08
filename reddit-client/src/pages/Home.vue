@@ -4,6 +4,15 @@ import Subreddit from "@/components/Subreddit.vue";
 </script>
 
 <template>
-  <AddSubreddit />
-  <Subreddit />
+  <div class="container">
+    <Subreddit />
+    <AddSubreddit />
+  </div>
 </template>
+
+<style scoped>
+.container {
+  display: flex;
+  height: 100vh;
+}
+</style>

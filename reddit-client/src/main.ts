@@ -1,6 +1,29 @@
-import './assets/main.css'
+import "./assets/main.css";
+import App from "./App.vue";
+import { createApp } from "vue";
 
-import { createApp } from 'vue'
-import App from './App.vue'
+import PrimeVue from "primevue/config";
+import Aura from "@primevue/themes/aura";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+import InputText from "primevue/inputtext";
+import Card from "primevue/card";
 
-createApp(App).mount('#app')
+import Splitter from "primevue/splitter";
+import SplitterPanel from "primevue/splitterpanel";
+
+const app = createApp(App);
+app
+  .use(PrimeVue, {
+    theme: {
+      preset: Aura,
+    },
+  })
+  .component("Button", Button)
+  .component("InputText", InputText)
+  .component("Card", Card)
+  .component("Splitter", Splitter)
+  .component("SplitterPanel", SplitterPanel)
+  .component("Dialog", Dialog);
+
+app.mount("#app");

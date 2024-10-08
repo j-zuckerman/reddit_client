@@ -3,9 +3,19 @@ const props = defineProps(["post"]);
 </script>
 
 <template>
-  <p>{{ props.post["title"] }}</p>
-  <p>{{ props.post["ups"] }}</p>
-  <p>{{ props.post["author"] }}</p>
-  <p>{{ props.post["text"] }}</p>
-  <p>{{ props.post["url"] }}</p>
+  <Card>
+    <template #title>{{ props.post["title"] }}</template>
+    <template #content>
+      <p class="m-0">
+        {{ props.post["text"] }}
+      </p>
+    </template>
+    <template #footer>
+      <div class="flex gap-4 mt-1">
+        <p>{{ props.post["ups"] }}</p>
+        <p>{{ props.post["author"] }}</p>
+        <a href="props.post['url']" />
+      </div>
+    </template>
+  </Card>
 </template>
