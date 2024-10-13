@@ -1,6 +1,7 @@
 import { store } from "@/store";
 import type Subreddit from "@/types/subreddit";
 import type Post from "@/types/posts";
+import generateUniqueId from "@/utils/generateId";
 
 export async function fetchData(subredditName: string): Promise<void> {
   store.loading = true;
@@ -14,25 +15,62 @@ export async function fetchData(subredditName: string): Promise<void> {
     console.log(result.data.children);
 
     const posts: Post[] = [];
+    const uniqueId: string = generateUniqueId();
+    let doesSubredditExist: boolean = checkIfSubredditExists(subredditName);
 
     for (let i = 0; i < result.data.children.length; i++) {
-      let { id, author_fullname, selftext, title, ups, url } = result.data.children[i].data;
-      posts.push({ id: id, title: title, upvotes: ups, url: url, text: selftext, author: author_fullname });
+      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery } = result.data.children[i].data;
+      let post_type = "";
+      let video_url = "";
+      let gallery_image_ids = [];
+
+      if (is_gallery) {
+        post_type = "TYPE_GALLERY";
+        let gallery_data = result.data.children[i].data["gallery_data"];
+
+        for (let i = 0; i < gallery_data.length; i++) {
+          gallery_image_ids.push(gallery_data[i].media_id);
+        }
+      } else if (is_video) {
+        post_type = "TYPE_VIDEO";
+        video_url = result.data.children[i].data["secure_media"].reddit_video["fallback_url"];
+        //console.log(video_url);
+      } else {
+        if (thumbnail.length > 0) post_type = "TYPE_IMAGE";
+        else post_type = "TYPE_TEXT_ONLY";
+      }
+
+      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, thumbnail_url: url, num_comments, post_type, gallery_image_ids });
     }
 
     const subreddit: Subreddit = {
       posts: posts,
       name: subredditName,
-      url: "google.com",
+      url: `https://www.reddit.com/r/${subredditName}/`,
+      id: uniqueId,
     };
 
     console.log(subreddit);
 
-    store.data.push(subreddit);
+    // check if subreddit already exists; if so, refresh it
+    if (doesSubredditExist) {
+      refreshSubredditPosts(subreddit);
+    } else store.data.push(subreddit);
   } catch (error) {
     console.log(error);
     store.error = (error as Error).message;
   } finally {
     store.loading = false;
   }
+}
+
+function checkIfSubredditExists(subredditName: string): boolean {
+  const index = store.data.findIndex((subreddit) => subreddit.name === subredditName);
+  if (index !== -1) return true;
+  else return false;
+}
+
+function refreshSubredditPosts(subreddit: Subreddit): void {
+  const index = store.data.findIndex((currentSubreddit) => currentSubreddit.name === subreddit.name);
+  store.data[index].posts = subreddit.posts;
 }

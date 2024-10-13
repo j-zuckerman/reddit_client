@@ -8,9 +8,9 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import InputText from "primevue/inputtext";
 import Card from "primevue/card";
-
-import Splitter from "primevue/splitter";
-import SplitterPanel from "primevue/splitterpanel";
+import ConfirmPopup from "primevue/confirmpopup";
+import Image from "primevue/image";
+import Galleria from "primevue/galleria";
 
 const app = createApp(App);
 app
@@ -22,8 +22,9 @@ app
   .component("Button", Button)
   .component("InputText", InputText)
   .component("Card", Card)
-  .component("Splitter", Splitter)
-  .component("SplitterPanel", SplitterPanel)
+  .component("ConfirmPopup", ConfirmPopup)
+  .component("Image", Image)
+  .component("ImageGallery", Galleria)
   .component("Dialog", Dialog);
 
 app.mount("#app");

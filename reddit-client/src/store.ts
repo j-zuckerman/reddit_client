@@ -6,3 +6,10 @@ export const store = reactive<Store>({
   error: null,
   loading: false,
 });
+
+export function deleteSubreddit(subredditId: string) {
+  const index = store.data.findIndex((subreddit) => subreddit.id === subredditId);
+  if (index !== -1) {
+    store.data.splice(index, 1);
+  }
+}
