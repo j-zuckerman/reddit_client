@@ -1,26 +1,38 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import { fetchData } from "@/composables/fetch";
+
+const subredditName = ref("");
+let isModalOpen = ref(false);
+
+const submitSubreddit = () => {
+  isModalOpen.value = false;
+  fetchData(subredditName.value);
+};
+</script>
 
 <template>
-  <button class="circular-button">+</button>
-  <p>Add Subreddit</p>
+  <div class="rectangle">
+    <Button label="+" @click="isModalOpen = true" />
+  </div>
+
+  <Dialog v-model:visible="isModalOpen" modal header="Enter Subreddit Name" :style="{ width: '25rem' }">
+    <div class="flex items-center gap-4 mb-4">
+      <label for="username" class="font-semibold w-24">Subreddit</label>
+      <InputText type="text" v-model="subredditName" class="flex-auto" autocomplete="off" variant="filled" />
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <Button type="button" label="Cancel" severity="secondary" @click="isModalOpen = false"></Button>
+      <Button type="button" label="Add Subreddit" @click="submitSubreddit"></Button>
+    </div>
+  </Dialog>
 </template>
 
-<style>
-.circular-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.circular-button:hover {
-  background-color: #0056b3;
+<style scoped>
+.rectangle {
+  flex: 1;
+  background-color: lightcoral;
+  border: 1px solid #000;
 }
 </style>

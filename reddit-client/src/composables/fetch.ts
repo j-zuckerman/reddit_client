@@ -1,20 +1,76 @@
-// import { ref } from "vue";
+import { store } from "@/store";
+import type Subreddit from "@/types/subreddit";
+import type Post from "@/types/posts";
+import generateUniqueId from "@/utils/generateId";
 
-// export function useFetch(url: string) {
-//   const data = ref(null);
-//   const error = ref<Error | null>(null);
-//   const loading = ref(true);
+export async function fetchData(subredditName: string): Promise<void> {
+  store.loading = true;
+  try {
+    console.log(subredditName);
+    const response = await fetch(`https://www.reddit.com/r/${subredditName}/top.json?limit=5`);
+    const result = await response.json();
 
-//   const fetchData = async () => {
-//     try {
-//       const response = await fetch(url);
-//       data.value = await response.json();
-//     } catch (err) {
-//       error.value = err;
-//     } finally {
-//       loading.value = false;
-//     }
-//   };
+    console.log(result);
+    // result. data.children = array of objects that need to be parsed
+    console.log(result.data.children);
 
-//   return { data, error };
-// }
+    const posts: Post[] = [];
+    const uniqueId: string = generateUniqueId();
+    let doesSubredditExist: boolean = checkIfSubredditExists(subredditName);
+
+    for (let i = 0; i < result.data.children.length; i++) {
+      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery } = result.data.children[i].data;
+      let post_type = "";
+      let video_url = "";
+      let gallery_image_ids = [];
+
+      if (is_gallery) {
+        post_type = "TYPE_GALLERY";
+        let gallery_data = result.data.children[i].data["gallery_data"];
+
+        for (let i = 0; i < gallery_data.length; i++) {
+          gallery_image_ids.push(gallery_data[i].media_id);
+        }
+      } else if (is_video) {
+        post_type = "TYPE_VIDEO";
+        video_url = result.data.children[i].data["secure_media"].reddit_video["fallback_url"];
+        //console.log(video_url);
+      } else {
+        if (thumbnail.length > 0) post_type = "TYPE_IMAGE";
+        else post_type = "TYPE_TEXT_ONLY";
+      }
+
+      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, thumbnail_url: url, num_comments, post_type, gallery_image_ids });
+    }
+
+    const subreddit: Subreddit = {
+      posts: posts,
+      name: subredditName,
+      url: `https://www.reddit.com/r/${subredditName}/`,
+      id: uniqueId,
+    };
+
+    console.log(subreddit);
+
+    // check if subreddit already exists; if so, refresh it
+    if (doesSubredditExist) {
+      refreshSubredditPosts(subreddit);
+    } else store.data.push(subreddit);
+  } catch (error) {
+    console.log(error);
+    store.error = (error as Error).message;
+  } finally {
+    store.loading = false;
+  }
+}
+
+function checkIfSubredditExists(subredditName: string): boolean {
+  const index = store.data.findIndex((subreddit) => subreddit.name === subredditName);
+  if (index !== -1) return true;
+  else return false;
+}
+
+function refreshSubredditPosts(subreddit: Subreddit): void {
+  const index = store.data.findIndex((currentSubreddit) => currentSubreddit.name === subreddit.name);
+  store.data[index].posts = subreddit.posts;
+}
