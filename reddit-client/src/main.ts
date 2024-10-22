@@ -11,6 +11,9 @@ import Card from "primevue/card";
 import ConfirmPopup from "primevue/confirmpopup";
 import Image from "primevue/image";
 import Galleria from "primevue/galleria";
+import Carousel from "primevue/carousel";
+import Menu from "primevue/menu";
+import Menubar from "primevue/menubar";
 
 const app = createApp(App);
 app
@@ -24,7 +27,10 @@ app
   .component("Card", Card)
   .component("ConfirmPopup", ConfirmPopup)
   .component("Image", Image)
+  .component("Carousel", Carousel)
   .component("ImageGallery", Galleria)
-  .component("Dialog", Dialog);
+  .component("Dialog", Dialog)
+  .component("Menubar", Menubar)
+  .component("Menu", Menu);
 
 app.mount("#app");

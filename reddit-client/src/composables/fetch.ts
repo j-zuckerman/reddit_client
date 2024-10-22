@@ -7,40 +7,47 @@ export async function fetchData(subredditName: string): Promise<void> {
   store.loading = true;
   try {
     console.log(subredditName);
-    const response = await fetch(`https://www.reddit.com/r/${subredditName}/top.json?limit=5`);
+    const response = await fetch(`https://www.reddit.com/r/${subredditName}/top.json?include_over_18=false&limit=5`);
     const result = await response.json();
 
-    console.log(result);
+    //console.log(result);
     // result. data.children = array of objects that need to be parsed
-    console.log(result.data.children);
+    //console.log(result.data.children);
 
     const posts: Post[] = [];
     const uniqueId: string = generateUniqueId();
     let doesSubredditExist: boolean = checkIfSubredditExists(subredditName);
 
     for (let i = 0; i < result.data.children.length; i++) {
-      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery } = result.data.children[i].data;
+      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery, over_18 } = result.data.children[i].data;
       let post_type = "";
       let video_url = "";
-      let gallery_image_ids = [];
+      let gallery_image_urls = [];
 
       if (is_gallery) {
         post_type = "TYPE_GALLERY";
-        let gallery_data = result.data.children[i].data["gallery_data"];
+        let gallery_data = result.data.children[i].data["media_metadata"];
+        console.table(gallery_data);
+
+        for (const key in gallery_data) {
+          if (gallery_data.hasOwnProperty(key)) {
+            console.log(key + ": " + decodeURI(gallery_data[key].s.u));
+          }
+        }
 
         for (let i = 0; i < gallery_data.length; i++) {
-          gallery_image_ids.push(gallery_data[i].media_id);
+          gallery_image_urls.push(gallery_data[i].media_id);
         }
       } else if (is_video) {
         post_type = "TYPE_VIDEO";
         video_url = result.data.children[i].data["secure_media"].reddit_video["fallback_url"];
-        //console.log(video_url);
+        console.log(video_url);
       } else {
         if (thumbnail.length > 0) post_type = "TYPE_IMAGE";
         else post_type = "TYPE_TEXT_ONLY";
       }
 
-      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, thumbnail_url: url, num_comments, post_type, gallery_image_ids });
+      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, thumbnail_url: url, num_comments, post_type, video_url });
     }
 
     const subreddit: Subreddit = {

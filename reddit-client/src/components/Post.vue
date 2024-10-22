@@ -9,9 +9,10 @@ const props = defineProps<{ post: Post }>();
   <div class="container" v-if="props.post['post_type'] == 'TYPE_VIDEO'">
     <h2 class="title">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
-    <video>
-      <source :href="props.post.video_url" type="video/mp4" />
+    <video controls>
+      <source :src="props.post.video_url" type="video/mp4" />
     </video>
+    <p>{{ props.post.video_url }}</p>
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
@@ -19,11 +20,15 @@ const props = defineProps<{ post: Post }>();
     </div>
   </div>
 
-  <div class="container" v-if="props.post['post_type'] == 'TYPE_GALLERY'">
+  <div class="container" v-else-if="props.post['post_type'] == 'TYPE_GALLERY'">
     <h2 class="title">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
 
-    <ImageGallery />
+    <ImageGallery :value="props.post.gallery_image_ids" :numVisible="5" containerStyle="max-width: 640px" :showThumbnails="false" :showIndicators="true">
+      <template #item="slotProps">
+        <img :src="slotProps.item" :alt="slotProps.item" style="width: 100%; display: block" />
+      </template>
+    </ImageGallery>
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
@@ -31,7 +36,7 @@ const props = defineProps<{ post: Post }>();
     </div>
   </div>
 
-  <div class="container" v-if="props.post['post_type'] == 'TYPE_IMAGE'">
+  <div class="container" v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
     <h2 class="title">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
     <Image class="image" :src="props.post.thumbnail_url" width="400px" />

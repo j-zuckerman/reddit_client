@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import Home from "./pages/Home.vue";
+import NavMenu from "./components/NavMenu.vue";
+import Subreddit from "./components/Subreddit.vue";
 </script>
 
 <template>
-  <header></header>
+  <header>
+    <NavMenu />
+  </header>
 
   <main>
-    <Home />
+    <Subreddit name="all" />
   </main>
 </template>
 
