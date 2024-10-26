@@ -7,7 +7,7 @@ const props = defineProps<{ post: Post }>();
 
 <template>
   <div class="container" v-if="props.post['post_type'] == 'TYPE_VIDEO'">
-    <h2 class="title">{{ props.post.post_type }}</h2>
+    <h2 class="type">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
     <video controls>
       <source :src="props.post.video_url" type="video/mp4" />
@@ -21,7 +21,7 @@ const props = defineProps<{ post: Post }>();
   </div>
 
   <div class="container" v-else-if="props.post['post_type'] == 'TYPE_GALLERY'">
-    <h2 class="title">{{ props.post.post_type }}</h2>
+    <h2 class="type">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
 
     <ImageGallery :value="props.post.gallery_image_ids" :numVisible="5" containerStyle="max-width: 640px" :showThumbnails="false" :showIndicators="true">
@@ -37,7 +37,7 @@ const props = defineProps<{ post: Post }>();
   </div>
 
   <div class="container" v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
-    <h2 class="title">{{ props.post.post_type }}</h2>
+    <h2 class="type">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
     <Image class="image" :src="props.post.thumbnail_url" width="400px" />
     <div class="footer">
@@ -48,7 +48,7 @@ const props = defineProps<{ post: Post }>();
   </div>
 
   <div class="container" v-else>
-    <h2 class="title">{{ props.post.post_type }}</h2>
+    <h2 class="type">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
     <p class="text">{{ props.post.text }}</p>
     <div class="footer">

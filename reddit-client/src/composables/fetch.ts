@@ -5,6 +5,7 @@ import generateUniqueId from "@/utils/generateId";
 
 export async function fetchData(subredditName: string): Promise<void> {
   store.loading = true;
+  store.error = null;
   try {
     console.log(subredditName);
     const response = await fetch(`https://www.reddit.com/r/${subredditName}/top.json?include_over_18=false&limit=5`);
