@@ -3,12 +3,12 @@ import type Subreddit from "@/types/subreddit";
 import type Post from "@/types/posts";
 import generateUniqueId from "@/utils/generateId";
 
-export async function fetchData(subredditName: string): Promise<void> {
+export async function fetchData(subredditName: string, sortBy: string = "best"): Promise<void> {
   store.loading = true;
   store.error = null;
   try {
     console.log(subredditName);
-    const response = await fetch(`https://www.reddit.com/r/${subredditName}/top.json?include_over_18=false&limit=5`);
+    const response = await fetch(`https://www.reddit.com/r/${subredditName}/${sortBy}.json?include_over_18=false&limit=5`);
     const result = await response.json();
 
     //console.log(result);
