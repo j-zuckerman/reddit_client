@@ -16,7 +16,7 @@ const props = defineProps<{ post: Post }>();
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
-      <a :href="props.post.url" />
+      <a :href="props.post.url" target="_blank">link</a>
     </div>
   </div>
 
@@ -32,18 +32,30 @@ const props = defineProps<{ post: Post }>();
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
-      <a :href="props.post.url" />
+      <a :href="props.post.url" target="_blank">link</a>
+    </div>
+  </div>
+
+  <div class="container" v-else-if="props.post['post_type'] == 'TYPE_LINK'">
+    <h2 class="type">{{ props.post.post_type }}</h2>
+    <h2 class="title">{{ props.post.title }}</h2>
+    <Image class="image" :src="props.post.image_url" width="400px" />
+    <div class="footer">
+      <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
+      <p>{{ props.post.author }}</p>
+      <a :href="props.post.external_link">article link</a>
+      <a :href="props.post.url" target="_blank">link</a>
     </div>
   </div>
 
   <div class="container" v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
     <h2 class="type">{{ props.post.post_type }}</h2>
     <h2 class="title">{{ props.post.title }}</h2>
-    <Image class="image" :src="props.post.thumbnail_url" width="400px" />
+    <Image class="image" :src="props.post.image_url" width="400px" />
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
-      <a :href="props.post.url" />
+      <a :href="props.post.url" target="_blank">link</a>
     </div>
   </div>
 
@@ -54,7 +66,7 @@ const props = defineProps<{ post: Post }>();
     <div class="footer">
       <p><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
       <p>{{ props.post.author }}</p>
-      <a :href="props.post.url" />
+      <a :href="props.post.url" target="_blank">link</a>
     </div>
   </div>
 </template>

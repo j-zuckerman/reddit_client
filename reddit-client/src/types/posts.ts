@@ -7,7 +7,9 @@ export default interface Post {
   num_comments?: number;
   author?: string;
   text?: string;
+  image_url?: string;
   thumbnail_url?: string;
+  external_link?: string;
   video_url?: string;
   gallery_image_ids?: Array<any>;
 }

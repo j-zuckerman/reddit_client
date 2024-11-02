@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { store } from "@/store";
 import { fetchData } from "@/composables/fetch";
+import AddSubreddit from "./AddSubreddit.vue";
 
 const checked = ref(false);
 
@@ -21,8 +22,7 @@ watch(selectedOption, async (newOption, oldOption) => {
       <div class="card flex justify-center">
         <Select v-model="selectedOption" :options="sortByOptions" optionLabel="name" class="w-full md:w-56" />
       </div>
-      <a href="#">About</a>
-      <a href="#">Services</a>
+      <AddSubreddit />
     </div>
     <div class="navbar-right">
       <a href="#"><i class="pi pi-reddit" style="font-size: 1.2rem"></i></a>

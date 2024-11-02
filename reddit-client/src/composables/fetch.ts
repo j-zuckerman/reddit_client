@@ -8,22 +8,25 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
   store.error = null;
   try {
     console.log(subredditName);
-    const response = await fetch(`https://www.reddit.com/r/${subredditName}/${sortBy}.json?include_over_18=false&limit=5`);
+    const response = await fetch(`https://www.reddit.com/r/${subredditName}/${sortBy}.json?include_over_18=false&limit=5&raw_json=1`);
     const result = await response.json();
 
     //console.log(result);
     // result. data.children = array of objects that need to be parsed
-    //console.log(result.data.children);
+    console.log(result.data.children);
 
     const posts: Post[] = [];
     const uniqueId: string = generateUniqueId();
     let doesSubredditExist: boolean = checkIfSubredditExists(subredditName);
 
     for (let i = 0; i < result.data.children.length; i++) {
-      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery, over_18 } = result.data.children[i].data;
-      let post_type = "";
-      let video_url = "";
+      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery, over_18, post_hint } = result.data.children[i].data;
+      let post_type: string = "";
+      let image_url: string = "";
+      let video_url: string = "";
+      let external_link: string = "";
       let gallery_image_urls = [];
+      permalink = "https://www.reddit.com/" + permalink;
 
       if (is_gallery) {
         post_type = "TYPE_GALLERY";
@@ -44,11 +47,17 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
         video_url = result.data.children[i].data["secure_media"].reddit_video["fallback_url"];
         console.log(video_url);
       } else {
-        if (thumbnail.length > 0) post_type = "TYPE_IMAGE";
-        else post_type = "TYPE_TEXT_ONLY";
+        if (post_hint === "link") {
+          post_type = "TYPE_LINK";
+          image_url = getPreviewImage(result.data.children[i].data);
+          external_link = result.data.children[i].data.url;
+        } else if (thumbnail.length > 0) {
+          post_type = "TYPE_IMAGE";
+          image_url = getPreviewImage(result.data.children[i].data);
+        } else post_type = "TYPE_TEXT_ONLY";
       }
 
-      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, thumbnail_url: url, num_comments, post_type, video_url });
+      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, image_url, num_comments, post_type, video_url, external_link });
     }
 
     const subreddit: Subreddit = {
@@ -81,4 +90,9 @@ function checkIfSubredditExists(subredditName: string): boolean {
 function refreshSubredditPosts(subreddit: Subreddit): void {
   const index = store.data.findIndex((currentSubreddit) => currentSubreddit.name === subreddit.name);
   store.data[index].posts = subreddit.posts;
+}
+
+function getPreviewImage(data: any): string {
+  console.log(data);
+  return data.preview.images[0].source.url;
 }
