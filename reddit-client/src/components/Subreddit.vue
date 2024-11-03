@@ -45,12 +45,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.rectangle {
-  flex: 1;
-  max-width: 500px;
-  border: 1px solid gray;
-}
-
 .subreddit-title {
   text-align: center;
 }
