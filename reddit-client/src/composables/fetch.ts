@@ -20,7 +20,7 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
     let doesSubredditExist: boolean = checkIfSubredditExists(subredditName);
 
     for (let i = 0; i < result.data.children.length; i++) {
-      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery, over_18, post_hint } = result.data.children[i].data;
+      let { id, author, selftext, title, ups, url, is_video, thumbnail, num_comments, permalink, is_gallery, over_18, post_hint, is_self } = result.data.children[i].data;
       let post_type: string = "";
       let image_url: string = "";
       let video_url: string = "";
@@ -46,6 +46,8 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
         post_type = "TYPE_VIDEO";
         video_url = result.data.children[i].data["secure_media"].reddit_video["fallback_url"];
         console.log(video_url);
+      } else if (is_self) {
+        post_type = "TYPE_TEXT_ONLY";
       } else {
         if (post_hint === "link") {
           post_type = "TYPE_LINK";
@@ -54,7 +56,7 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
         } else if (thumbnail.length > 0) {
           post_type = "TYPE_IMAGE";
           image_url = getPreviewImage(result.data.children[i].data);
-        } else post_type = "TYPE_TEXT_ONLY";
+        }
       }
 
       posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, image_url, num_comments, post_type, video_url, external_link });
@@ -94,5 +96,8 @@ function refreshSubredditPosts(subreddit: Subreddit): void {
 
 function getPreviewImage(data: any): string {
   console.log(data);
-  return data.preview.images[0].source.url;
+  const url1 = data?.preview?.images?.[0]?.source?.url;
+  const url2 = data.thumbnail;
+
+  return url1 ?? url2 ?? "default_image_url.jpg";
 }

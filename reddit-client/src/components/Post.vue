@@ -8,34 +8,25 @@ const props = defineProps<{ post: Post }>();
 <template>
   <a :href="props.post.url" target="_blank" class="post-link">
     <div class="post-container">
-      <div>
-        <template v-if="props.post['post_type'] == 'TYPE_VIDEO'">
-          <video controls class="post-thumbnail">
-            <source :src="props.post.video_url" type="video/mp4" />
-          </video>
-        </template>
-        <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'">
-          <ImageGallery :value="props.post.gallery_image_ids" :numVisible="5" containerStyle="max-width: 640px" :showThumbnails="false" :showIndicators="true">
-            <template #item="slotProps">
-              <img :src="slotProps.item" :alt="slotProps.item" style="width: 100%; display: block" />
-            </template>
-          </ImageGallery>
-        </template>
-        <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
-          <div class="thumbnail-container">
-            <img class="post-thumbnail" :src="props.post.image_url" />
-            <a :href="props.post.external_link" class="post-external-link">article link</a>
-          </div>
-        </template>
-        <template v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
+      <template v-if="props.post['post_type'] == 'TYPE_VIDEO'">
+        <video controls class="post-thumbnail">
+          <source :src="props.post.video_url" type="video/mp4" />
+        </video>
+      </template>
+      <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'"> </template>
+      <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
+        <div class="thumbnail-container">
           <img class="post-thumbnail" :src="props.post.image_url" />
-        </template>
-        <template v-else>
-          <video controls>
-            <source :src="props.post.video_url" type="video/mp4" />
-          </video>
-        </template>
-      </div>
+          <a :href="props.post.external_link" class="post-external-link">article link</a>
+        </div>
+      </template>
+      <template v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
+        <img class="post-thumbnail" :src="props.post.image_url" />
+      </template>
+      <template v-else>
+        <img class="post-thumbnail" :src="props.post.image_url" />
+      </template>
+
       <div class="post-content">
         <div class="post-header">
           <p>u/{{ props.post.author }}</p>
@@ -45,8 +36,12 @@ const props = defineProps<{ post: Post }>();
         </div>
         <div class="post-footer">
           <p class="post-upvotes"><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
+          <span v-if="props.post['post_type'] == 'TYPE_VIDEO'" class="post-type"> <v-icon name="fa-video" />Video</span>
+          <span v-else-if="props.post['post_type'] == 'TYPE_GALLERY'" class="post-type"><v-icon name="fa-images" /> Gallery</span>
+          <span v-else-if="props.post['post_type'] == 'TYPE_LINK'" class="post-type"> <v-icon name="fa-link" />Link</span>
+          <span v-else-if="props.post['post_type'] == 'TYPE_IMAGE'" class="post-type"><v-icon name="fa-image" /> Image</span>
+          <span v-else class="post-type"> Text </span>
           <p class="post-comments">{{ props.post.num_comments }} comments</p>
-          <h2 class="type">{{ props.post.post_type }}</h2>
         </div>
       </div>
     </div>
@@ -64,7 +59,7 @@ const props = defineProps<{ post: Post }>();
   display: flex;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
-  padding: 8px 4px;
+  padding: 4px 2px;
   margin: 10px 0;
   font-family: Arial, sans-serif;
   font-size: 12px;
@@ -75,8 +70,8 @@ const props = defineProps<{ post: Post }>();
 }
 
 .post-thumbnail {
-  width: 110px;
-  height: 90px;
+  width: 140px;
+  height: 120px;
   margin-right: 10px;
   object-fit: cover;
   border-radius: 5px;
@@ -110,11 +105,7 @@ const props = defineProps<{ post: Post }>();
 
 .post-title {
   font-weight: bold;
-}
-
-.post-body {
-  margin: 10px 0;
-  line-height: 1.4;
+  color: white;
 }
 
 .post-footer {
@@ -126,17 +117,18 @@ const props = defineProps<{ post: Post }>();
   margin: 0 5px;
 }
 
-.post-author,
-.post-upvotes,
-.post-comments {
+.post-author {
   color: #555;
 }
 
 .post-upvotes,
-.post-comments {
-  background-color: #ff4500;
+.post-type {
+  background-color: gray;
   color: white;
   padding: 5px 10px;
   border-radius: 20px;
+}
+.post-comments {
+  color: white;
 }
 </style>

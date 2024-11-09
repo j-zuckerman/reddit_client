@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { fetchData } from "@/composables/fetch";
+import Modal from "./Modal.vue";
+
+const showModal = ref(false);
 
 const subredditName = ref("");
 let isModalOpen = ref(false);
@@ -12,27 +15,27 @@ const submitSubreddit = () => {
 </script>
 
 <template>
-  <div class="rectangle">
-    <Button label="+" @click="isModalOpen = true" />
+  <div>
+    <button @click="showModal = true">Open Modal</button>
+    <Modal :isOpen="showModal" @close="showModal = false">
+      <template #header>
+        <h2>Add Subreddit</h2>
+      </template>
+      <template #body>
+        <div>
+          <form @submit.prevent="submitSubreddit">
+            <div>
+              <label for="name">Subreddit Name:</label>
+              <input type="text" id="name" v-model="subredditName" />
+            </div>
+          </form>
+        </div>
+      </template>
+      <template #footer>
+        <button @click="showModal = false">Close</button>
+      </template>
+    </Modal>
   </div>
-
-  <Dialog v-model:visible="isModalOpen" modal header="Enter Subreddit Name" :style="{ width: '25rem' }">
-    <div class="flex items-center gap-4 mb-4">
-      <label for="username" class="font-semibold w-24">Subreddit</label>
-      <InputText type="text" v-model="subredditName" class="flex-auto" autocomplete="off" variant="filled" />
-    </div>
-
-    <div class="flex justify-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="isModalOpen = false"></Button>
-      <Button type="button" label="Add Subreddit" @click="submitSubreddit"></Button>
-    </div>
-  </Dialog>
 </template>
 
-<style scoped>
-.rectangle {
-  flex: 1;
-  background-color: lightcoral;
-  border: 1px solid #000;
-}
-</style>
+<style scoped></style>
