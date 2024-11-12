@@ -16,7 +16,10 @@ const submitSubreddit = () => {
 
 <template>
   <div>
-    <button @click="showModal = true">Open Modal</button>
+    <button class="circular-button" @click="showModal = true">
+      <span class="plus-sign">+</span>
+    </button>
+
     <Modal :isOpen="showModal" @close="showModal = false">
       <template #header>
         <h2>Add Subreddit</h2>
@@ -38,4 +41,27 @@ const submitSubreddit = () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.circular-button {
+  width: 38px;
+  height: 38px;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 50%;
+  color: var(--text-color);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.circular-button:hover {
+  background-color: var(--accent-color);
+}
+
+.plus-sign {
+  font-weight: bold;
+}
+</style>

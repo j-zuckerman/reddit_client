@@ -29,16 +29,16 @@ const props = defineProps<{ post: Post }>();
 
       <div class="post-content">
         <div class="post-header">
-          <p>u/{{ props.post.author }}</p>
+          <p class="post-author">u/{{ props.post.author }}</p>
         </div>
         <div class="post-title">
           <h2 class="title">{{ props.post.title }}</h2>
         </div>
         <div class="post-footer">
           <p class="post-upvotes"><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
-          <span v-if="props.post['post_type'] == 'TYPE_VIDEO'" class="post-type"> <v-icon name="fa-video" />Video</span>
+          <span v-if="props.post['post_type'] == 'TYPE_VIDEO'" class="post-type"> <v-icon name="fa-video" /> Video</span>
           <span v-else-if="props.post['post_type'] == 'TYPE_GALLERY'" class="post-type"><v-icon name="fa-images" /> Gallery</span>
-          <span v-else-if="props.post['post_type'] == 'TYPE_LINK'" class="post-type"> <v-icon name="fa-link" />Link</span>
+          <span v-else-if="props.post['post_type'] == 'TYPE_LINK'" class="post-type"> <v-icon name="fa-link" /> Link</span>
           <span v-else-if="props.post['post_type'] == 'TYPE_IMAGE'" class="post-type"><v-icon name="fa-image" /> Image</span>
           <span v-else class="post-type"> Text </span>
           <p class="post-comments">{{ props.post.num_comments }} comments</p>
@@ -57,8 +57,8 @@ const props = defineProps<{ post: Post }>();
 
 .post-container {
   display: flex;
-  border-top: 1px solid lightgray;
-  border-bottom: 1px solid lightgray;
+  border-top: 1px solid var(--underline-color);
+  border-bottom: 1px solid var(--underline-color);
   padding: 4px 2px;
   margin: 10px 0;
   font-family: Arial, sans-serif;
@@ -66,7 +66,7 @@ const props = defineProps<{ post: Post }>();
 }
 
 .post-container:hover {
-  background-color: darkgrey;
+  background-color: var(--gray-5);
 }
 
 .post-thumbnail {
@@ -105,7 +105,7 @@ const props = defineProps<{ post: Post }>();
 
 .post-title {
   font-weight: bold;
-  color: white;
+  color: var(--text-color);
 }
 
 .post-footer {
@@ -118,17 +118,17 @@ const props = defineProps<{ post: Post }>();
 }
 
 .post-author {
-  color: #555;
+  color: var(--gray-1);
 }
 
 .post-upvotes,
 .post-type {
-  background-color: gray;
-  color: white;
+  background-color: var(--gray-4);
+  color: var(--text-color);
   padding: 5px 10px;
   border-radius: 20px;
 }
 .post-comments {
-  color: white;
+  color: var(--text-color);
 }
 </style>

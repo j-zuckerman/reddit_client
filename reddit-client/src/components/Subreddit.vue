@@ -1,40 +1,31 @@
 <script setup lang="ts">
 import Post from "./Post.vue";
 import Loading from "./Loading.vue";
-import { store } from "@/store";
+import { store, deleteSubreddit } from "@/store";
 import { onMounted } from "vue";
 import { fetchData } from "@/composables/fetch";
 import { ref } from "vue";
-import Dropdown from "./Dropdown.vue";
 
 const props = defineProps<{ name: string }>();
 const menu = ref();
-const items = ref([
-  {
-    label: "Options",
-    items: [
-      {
-        label: "Refresh",
-        icon: "pi pi-refresh",
-      },
-      {
-        label: "Delete",
-        icon: "pi pi-trash",
-      },
-    ],
-  },
-]);
 
-const selectedSubreddit = ref(props.name);
+const selectedSubreddits = ref<string[]>([props.name]);
 
-const dropdownOptions = ["Refresh", "Delete"];
 const toggle = (event: any) => {
   console.log(menu);
   menu.value[0].toggle(event);
 };
 
 const changeSubreddit = (name: string) => {
-  selectedSubreddit.value = name;
+  if (selectedSubreddits.value.includes(name)) {
+    selectedSubreddits.value = selectedSubreddits.value.filter((sub) => sub !== name);
+  } else {
+    selectedSubreddits.value.push(name);
+  }
+};
+
+const removeSubreddit = (name: string) => {
+  selectedSubreddits.value = selectedSubreddits.value.filter((sub) => sub !== name);
 };
 
 onMounted(() => {
@@ -47,23 +38,17 @@ onMounted(() => {
   <div v-else>
     <nav class="breadcrumb">
       <ul>
-        <li v-for="(subreddit, index) in store.data" :key="subreddit.name">
-          <a @click.prevent="changeSubreddit(subreddit.name)" :class="{ active: subreddit.name === selectedSubreddit }"> r/{{ subreddit.name }} </a>
+        <li v-for="(subreddit, index) in store.data" :key="subreddit.name" class="breadcrumb-item">
+          <a @click.prevent="changeSubreddit(subreddit.name)" :class="{ active: selectedSubreddits.includes(subreddit.name) }"> r/{{ subreddit.name }} </a>
+          <span v-if="selectedSubreddits.includes(subreddit.name)" class="delete-btn" @click.prevent="removeSubreddit(subreddit.name)">×</span>
           <span v-if="index < store.data.length - 1">/</span>
         </li>
       </ul>
-
-      <div>
-        <Dropdown :options="dropdownOptions" />
-      </div>
-      <v-icon name="fa-ellipsis-h" @click="toggle" />
-
-      <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
     </nav>
-
-    <div v-if="store.data && store.data.length" v-for="subreddit in store.data" :key="subreddit.name">
-      <div v-if="subreddit.name === selectedSubreddit" v-for="post in subreddit.posts" :key="post.id">
-        <Post :post="post" />
+    <div></div>
+    <div v-if="store.data && store.data.length">
+      <div v-for="subreddit in store.data" :key="subreddit.name">
+        <div v-if="selectedSubreddits.includes(subreddit.name)" v-for="post in subreddit.posts" :key="post.id"><Post :post="post" /></div>
       </div>
     </div>
   </div>
@@ -72,8 +57,6 @@ onMounted(() => {
 <style scoped>
 .breadcrumb {
   padding: 10px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
 }
 
 .breadcrumb ul {
@@ -83,34 +66,46 @@ onMounted(() => {
   margin: 0;
 }
 
-.breadcrumb li {
-  display: flex;
-  align-items: center;
+.breadcrumb-item {
+  position: relative;
+  display: inline-block;
+  padding-right: 20px;
+}
+.breadcrumb-item .delete-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+  display: none;
+  color: red;
+  font-size: 18px;
 }
 
-.breadcrumb li a {
+.breadcrumb-item:hover .delete-btn {
+  display: inline;
+}
+
+.breadcrumb-item a {
   text-decoration: none;
-  color: #007bff;
+  color: var(--text-color);
   padding: 5px 10px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
 }
 
-.breadcrumb li a.active {
-  background-color: #007bff;
-  color: white;
+.breadcrumb-item a.active {
+  background-color: var(--gray-1);
 }
 
-.breadcrumb li a:hover {
-  background-color: #e2e6ea;
+.breadcrumb-item a:hover {
+  background-color: var(--gray-2);
 }
 
-.breadcrumb li span {
+.breadcrumb-item span {
   margin: 0 5px;
   color: #6c757d;
 }
-.subreddit-list {
-}
+
 .subreddit-title {
   text-align: center;
 }
