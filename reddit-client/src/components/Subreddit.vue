@@ -24,8 +24,9 @@ const changeSubreddit = (name: string) => {
   }
 };
 
-const removeSubreddit = (name: string) => {
+const removeSubreddit = (name: string, id: string) => {
   selectedSubreddits.value = selectedSubreddits.value.filter((sub) => sub !== name);
+  deleteSubreddit(id);
 };
 
 onMounted(() => {
@@ -40,8 +41,7 @@ onMounted(() => {
       <ul>
         <li v-for="(subreddit, index) in store.data" :key="subreddit.name" class="breadcrumb-item">
           <a @click.prevent="changeSubreddit(subreddit.name)" :class="{ active: selectedSubreddits.includes(subreddit.name) }"> r/{{ subreddit.name }} </a>
-          <span v-if="selectedSubreddits.includes(subreddit.name)" class="delete-btn" @click.prevent="removeSubreddit(subreddit.name)">×</span>
-          <span v-if="index < store.data.length - 1">/</span>
+          <span v-if="selectedSubreddits.includes(subreddit.name)" class="delete-btn" @click.prevent="removeSubreddit(subreddit.name, subreddit.id)">×</span>
         </li>
       </ul>
     </nav>
@@ -108,5 +108,11 @@ onMounted(() => {
 
 .subreddit-title {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
 }
 </style>

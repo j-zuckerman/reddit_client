@@ -11,3 +11,15 @@ main {
   padding: 2rem;
   font-weight: normal;
 }
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+  main {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 1rem;
+    font-weight: normal;
+  }
+}

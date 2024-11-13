@@ -35,7 +35,7 @@ const props = defineProps<{ post: Post }>();
           <h2 class="title">{{ props.post.title }}</h2>
         </div>
         <div class="post-footer">
-          <p class="post-upvotes"><i class="pi pi-arrow-up"></i>{{ props.post.upvotes }}</p>
+          <p class="post-upvotes"><v-icon name="fa-arrow-up" />{{ props.post.upvotes }}</p>
           <span v-if="props.post['post_type'] == 'TYPE_VIDEO'" class="post-type"> <v-icon name="fa-video" /> Video</span>
           <span v-else-if="props.post['post_type'] == 'TYPE_GALLERY'" class="post-type"><v-icon name="fa-images" /> Gallery</span>
           <span v-else-if="props.post['post_type'] == 'TYPE_LINK'" class="post-type"> <v-icon name="fa-link" /> Link</span>
@@ -128,7 +128,30 @@ const props = defineProps<{ post: Post }>();
   padding: 5px 10px;
   border-radius: 20px;
 }
+
 .post-comments {
   color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+  .post-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .post-thumbnail {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 5px;
+    padding-top: 5px;
+  }
+
+  .post-title {
+    margin-bottom: 5px;
+  }
 }
 </style>

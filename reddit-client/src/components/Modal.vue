@@ -47,7 +47,7 @@ const modalStyle = computed(() => ({
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(var(--overlay-color), 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -56,7 +56,7 @@ const modalStyle = computed(() => ({
 
 .modal-container {
   position: absolute;
-  background: white;
+  background: var(--background-color);
   padding: 20px;
   border-radius: 8px;
   max-width: 500px;

@@ -9,6 +9,8 @@
   --gray-4: #e5e5e5;
   --gray-5: #f2f2f2;
   --accent-color: #faa916;
+  --accent-color-hov: gold;
+  --overlay-color: 0, 0, 0;
 }
 
 [data-theme="dark"] {
@@ -21,6 +23,8 @@
   --gray-4: #282828;
   --gray-5: #202020;
   --accent-color: #96031a;
+  --accent-color-hov: #6b0312;
+  --overlay-color: 255, 255, 255;
 }
 
 *,

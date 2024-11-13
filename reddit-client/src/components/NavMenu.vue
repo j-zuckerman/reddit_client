@@ -8,6 +8,11 @@ import ThemeToggle from "./ThemeToggle.vue";
 const selected = ref("Best");
 const options = ref(["Best", "Hot", "New", "Top", "Rising"]);
 
+const isMenuOpen = ref(false);
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
 const handleSelectChange = async () => {
   console.log(selected.value);
   for (let i = 0; i < store.data.length; i++) {
@@ -30,14 +35,29 @@ const handleSelectChange = async () => {
       </div>
       <AddSubreddit />
     </div>
-    <div class="navbar-right">
+    <div class="navbar-right hide-on-mobile">
       <div>
         <ThemeToggle />
       </div>
 
-      <a href="#"><v-icon name="fa-reddit-square" /></a>
-      <a href="#"><v-icon name="fa-github-square" /></a>
+      <a href="www.reddit.com" target="_blank"><v-icon name="fa-reddit-square" /></a>
       <a href="#"><v-icon name="fa-cog" /></a>
+      <a href=""><v-icon name="fa-github-square" /></a>
+    </div>
+
+    <div class="hamburger-menu" @click="toggleMenu">
+      <span v-if="isMenuOpen">✕</span>
+      <span v-else>☰</span>
+    </div>
+
+    <div v-if="isMenuOpen" class="mobile-menu">
+      <div>
+        <ThemeToggle />
+      </div>
+
+      <a href="www.reddit.com" target="_blank"><v-icon name="fa-reddit-square" /></a>
+      <a href="#"><v-icon name="fa-cog" /></a>
+      <a href=""><v-icon name="fa-github-square" /></a>
     </div>
   </nav>
 </template>
@@ -101,5 +121,49 @@ const handleSelectChange = async () => {
 .styled-select:focus {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.hide-on-mobile {
+  display: flex;
+}
+
+.hamburger-menu {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+}
+
+@media (max-width: 480px) {
+  .select-container {
+    width: 140px;
+  }
+  .navbar {
+    padding: 8px;
+    width: 95%;
+  }
+
+  .hamburger-menu {
+    display: block;
+  }
+
+  .hide-on-mobile {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(var(--overlay-color), 0.1);
+  }
 }
 </style>
