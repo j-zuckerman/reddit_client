@@ -32,7 +32,7 @@ describe("Subreddit", () => {
 
     // await flushPromises();
     // await wrapper.setProps({ store.loading: false })
-    const subredditTitle = wrapper.find("h2.subreddit-title");
+    const subredditTitle = wrapper.find("a.active");
     // //console.log(subredditTitle);
     expect(subredditTitle.text()).toContain("r/test");
   });

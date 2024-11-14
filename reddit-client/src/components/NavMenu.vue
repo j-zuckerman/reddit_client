@@ -40,9 +40,9 @@ const handleSelectChange = async () => {
         <ThemeToggle />
       </div>
 
-      <a href="www.reddit.com" target="_blank"><v-icon name="fa-reddit-square" /></a>
+      <a href="https://www.reddit.com" target="_blank"><v-icon name="fa-reddit-square" /></a>
       <a href="#"><v-icon name="fa-cog" /></a>
-      <a href=""><v-icon name="fa-github-square" /></a>
+      <a href="#"><v-icon name="fa-github-square" /></a>
     </div>
 
     <div class="hamburger-menu" @click="toggleMenu">

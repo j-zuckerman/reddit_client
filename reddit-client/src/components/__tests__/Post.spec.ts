@@ -65,10 +65,9 @@ describe("Posts", () => {
       },
     });
 
-    const postType = wrapper.find("h2.type");
+    const postType = wrapper.find("span.post-type");
 
-    expect(postType.text()).toContain("TYPE_IMAGE");
-    //more testing
+    expect(postType.text()).toContain("Image");
   });
 
   it("renders text posts correctly", async () => {
@@ -77,11 +76,9 @@ describe("Posts", () => {
         post: textPost,
       },
     });
+    const postType = wrapper.find("span.post-type");
 
-    const postType = wrapper.find("h2.type");
-
-    expect(postType.text()).toContain("TYPE_TEXT");
-    //more testing
+    expect(postType.text()).toContain("Text");
   });
 
   it("renders video posts correctly", async () => {
@@ -91,10 +88,9 @@ describe("Posts", () => {
       },
     });
 
-    const postType = wrapper.find("h2.type");
+    const postType = wrapper.find("span.post-type");
 
-    expect(postType.text()).toContain("TYPE_VIDEO");
-    //more testing
+    expect(postType.text()).toContain("Video");
   });
 
   it("renders gallery posts correctly", async () => {
@@ -103,10 +99,8 @@ describe("Posts", () => {
         post: galleryPost,
       },
     });
+    const postType = wrapper.find("span.post-type");
 
-    const postType = wrapper.find("h2.type");
-
-    expect(postType.text()).toContain("TYPE_GALLERY");
-    //more testing
+    expect(postType.text()).toContain("Gallery");
   });
 });
