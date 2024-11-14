@@ -2,7 +2,7 @@
 import Post from "./Post.vue";
 import Loading from "./Loading.vue";
 import { store, deleteSubreddit } from "@/store";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { fetchData } from "@/composables/fetch";
 import { ref } from "vue";
 
@@ -10,6 +10,7 @@ const props = defineProps<{ name: string }>();
 const menu = ref();
 
 const selectedSubreddits = ref<string[]>([props.name]);
+const allSubreddits = ref<string[]>([]);
 
 const toggle = (event: any) => {
   console.log(menu);
@@ -29,8 +30,24 @@ const removeSubreddit = (name: string, id: string) => {
   deleteSubreddit(id);
 };
 
-onMounted(() => {
-  fetchData(props.name);
+watch(
+  selectedSubreddits,
+  (newSubreddits) => {
+    localStorage.setItem("selectedSubreddits", JSON.stringify(newSubreddits));
+  },
+  { deep: true }
+);
+
+onMounted(async () => {
+  const savedSubreddits = localStorage.getItem("selectedSubreddits");
+
+  if (savedSubreddits) {
+    selectedSubreddits.value = JSON.parse(savedSubreddits);
+
+    for (let i = 0; i < selectedSubreddits.value.length; i++) {
+      await fetchData(selectedSubreddits.value[i].toLowerCase());
+    }
+  } else fetchData(props.name);
 });
 </script>
 
