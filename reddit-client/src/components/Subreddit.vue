@@ -58,7 +58,7 @@ onMounted(async () => {
       <ul>
         <li v-for="(subreddit, index) in store.data" :key="subreddit.name" class="breadcrumb-item">
           <a @click.prevent="changeSubreddit(subreddit.name)" :class="{ active: selectedSubreddits.includes(subreddit.name) }"> r/{{ subreddit.name }} </a>
-          <span v-if="selectedSubreddits.includes(subreddit.name)" class="delete-btn" @click.prevent="removeSubreddit(subreddit.name, subreddit.id)">×</span>
+          <span class="delete-btn" @click.prevent="removeSubreddit(subreddit.name, subreddit.id)">×</span>
         </li>
       </ul>
     </nav>
@@ -94,7 +94,7 @@ onMounted(async () => {
   top: 0;
   cursor: pointer;
   display: none;
-  color: red;
+  color: var(--accent-color-hov);
   font-size: 18px;
 }
 
