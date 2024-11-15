@@ -1,8 +1,26 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
 import type Post from "@/types/posts";
 
 //const props = defineProps(["post"]);
 const props = defineProps<{ post: Post }>();
+const showExpanded = ref(false);
+
+const toggleExpanded = () => {
+  showExpanded.value = !showExpanded.value;
+};
+
+const preventLinkNavigation = (event: any) => {
+  event.preventDefault();
+  event.stopPropagation();
+};
+
+onMounted(() => {
+  const elementsToStopPropagation = document.querySelectorAll(".post-expand");
+  elementsToStopPropagation.forEach((element) => {
+    element.addEventListener("click", preventLinkNavigation);
+  });
+});
 </script>
 
 <template>
@@ -17,14 +35,15 @@ const props = defineProps<{ post: Post }>();
       <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
         <div class="thumbnail-container">
           <img class="post-thumbnail" :src="props.post.image_url" />
-          <a :href="props.post.external_link" class="post-external-link">article link</a>
         </div>
       </template>
       <template v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
         <img class="post-thumbnail" :src="props.post.image_url" />
       </template>
       <template v-else>
-        <img class="post-thumbnail" :src="props.post.image_url" />
+        <div v-if="!showExpanded" class="no-image-thumbnail">
+          <v-icon name="fa-image" />
+        </div>
       </template>
 
       <div class="post-content">
@@ -34,7 +53,12 @@ const props = defineProps<{ post: Post }>();
         <div class="post-title">
           <h2 class="title">{{ props.post.title }}</h2>
         </div>
+
         <div class="post-footer">
+          <span class="post-expand" @click="toggleExpanded">
+            <v-icon v-if="showExpanded" v-icon name="fa-window-close" />
+            <v-icon v-else name="fa-expand" />
+          </span>
           <p class="post-upvotes"><v-icon name="fa-arrow-up" />{{ props.post.upvotes }}</p>
           <span v-if="props.post['post_type'] == 'TYPE_VIDEO'" class="post-type"> <v-icon name="fa-video" /> Video</span>
           <span v-else-if="props.post['post_type'] == 'TYPE_GALLERY'" class="post-type"><v-icon name="fa-images" /> Gallery</span>
@@ -42,6 +66,27 @@ const props = defineProps<{ post: Post }>();
           <span v-else-if="props.post['post_type'] == 'TYPE_IMAGE'" class="post-type"><v-icon name="fa-image" /> Image</span>
           <span v-else class="post-type"> Text </span>
           <p class="post-comments">{{ props.post.num_comments }} comments</p>
+        </div>
+
+        <div v-if="showExpanded" class="post-expanded">
+          <template v-if="props.post['post_type'] == 'TYPE_VIDEO'">
+            <video controls class="post-image">
+              <source :src="props.post.video_url" type="video/mp4" />
+            </video>
+          </template>
+          <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'"> </template>
+          <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
+            <div class="image-container">
+              <img class="post-image" :src="props.post.image_url" />
+              <a :href="props.post.external_link" class="post-external-link" target="_blank">article link</a>
+            </div>
+          </template>
+          <template v-else-if="props.post['post_type'] == 'TYPE_IMAGE'">
+            <img class="post-image" :src="props.post.image_url" />
+          </template>
+          <template v-else>
+            <p class="post-expanded-text">{{ props.post.text }}</p>
+          </template>
         </div>
       </div>
     </div>
@@ -77,7 +122,19 @@ const props = defineProps<{ post: Post }>();
   border-radius: 5px;
 }
 
-.thumbnail-container {
+.no-image-thumbnail {
+  width: 140px;
+  height: 120px;
+  margin-right: 10px;
+  object-fit: cover;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--text-color);
+}
+
+.image-container {
   position: relative;
 }
 
@@ -121,6 +178,25 @@ const props = defineProps<{ post: Post }>();
   color: var(--gray-1);
 }
 
+.post-expanded .post-image {
+  width: auto;
+  height: auto;
+  max-width: 75%;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.post-expand {
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.post-expand:hover {
+  background-color: var(--gray-4);
+  color: var(--text-color);
+}
+
 .post-upvotes,
 .post-type {
   background-color: var(--gray-4);
@@ -131,6 +207,12 @@ const props = defineProps<{ post: Post }>();
 
 .post-comments {
   color: var(--text-color);
+}
+
+.post-expanded-text {
+  max-width: 85%;
+  padding: 1rem;
+  font-size: 14px;
 }
 
 @media (max-width: 768px) {
@@ -152,6 +234,15 @@ const props = defineProps<{ post: Post }>();
 
   .post-title {
     margin-bottom: 5px;
+  }
+
+  .no-image-thumbnail {
+    display: none;
+  }
+
+  .post-expand,
+  .post-expanded {
+    display: none;
   }
 }
 </style>
