@@ -24,7 +24,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <a :href="props.post.url" target="_blank" class="post-link">
+  <a :href="props.post.url" target="_blank" class="post post-link">
     <div class="post-container">
       <template v-if="props.post['post_type'] == 'TYPE_VIDEO'">
         <video controls class="post-thumbnail">

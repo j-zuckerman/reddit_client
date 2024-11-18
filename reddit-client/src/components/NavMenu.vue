@@ -36,7 +36,7 @@ const handleSelectChange = async () => {
       <AddSubreddit />
     </div>
     <div class="navbar-right hide-on-mobile">
-      <div>
+      <div id="theme-toggle">
         <ThemeToggle />
       </div>
 
