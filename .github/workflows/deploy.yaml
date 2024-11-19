@@ -23,15 +23,22 @@ jobs:
           check-latest: true
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run Vitest
         run: npm run test:unit
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
         with:
-          start: npm start
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
   deploy:
     name: Deploy to Netlify
