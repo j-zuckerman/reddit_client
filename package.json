@@ -11,7 +11,8 @@
     "test:e2e": "playwright test",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "start-and-run-e2e-tests": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && npm run test:e2e\""
   },
   "dependencies": {
     "@primevue/themes": "^4.1.0",
