@@ -11,5 +11,5 @@ export default interface Post {
   thumbnail_url?: string;
   external_link?: string;
   video_url?: string;
-  gallery_image_ids?: Array<any>;
+  gallery_image_urls?: Array<any>;
 }

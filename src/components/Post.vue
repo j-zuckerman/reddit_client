@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import type Post from "@/types/posts";
+import ImageGallery from "./ImageGallery.vue";
 
 //const props = defineProps(["post"]);
 const props = defineProps<{ post: Post }>();
@@ -16,7 +17,7 @@ const preventLinkNavigation = (event: any) => {
 };
 
 onMounted(() => {
-  const elementsToStopPropagation = document.querySelectorAll(".post-expand");
+  const elementsToStopPropagation = document.querySelectorAll(".post-expand, .gallery-arrow");
   elementsToStopPropagation.forEach((element) => {
     element.addEventListener("click", preventLinkNavigation);
   });
@@ -31,7 +32,12 @@ onMounted(() => {
           <source :src="props.post.video_url" type="video/mp4" />
         </video>
       </template>
-      <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'"> </template>
+      <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'">
+        <div class="thumbnail-container">
+          <img class="post-thumbnail" :src="props.post.gallery_image_urls?.[0] ?? ''" />
+          <span v-if="!showExpanded" class="post-gallery-size"><v-icon name="fa-images" /> {{ props.post.gallery_image_urls?.length ?? 0 }} </span>
+        </div>
+      </template>
       <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
         <div class="thumbnail-container">
           <img class="post-thumbnail" :src="props.post.image_url" />
@@ -74,7 +80,11 @@ onMounted(() => {
               <source :src="props.post.video_url" type="video/mp4" />
             </video>
           </template>
-          <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'"> </template>
+          <template v-else-if="props.post['post_type'] == 'TYPE_GALLERY'">
+            <div class="gallery-container">
+              <ImageGallery :images="props.post['gallery_image_urls']" />
+            </div>
+          </template>
           <template v-else-if="props.post['post_type'] == 'TYPE_LINK'">
             <div class="image-container">
               <img class="post-image" :src="props.post.image_url" />
@@ -134,11 +144,13 @@ onMounted(() => {
   border: 1px solid var(--text-color);
 }
 
-.image-container {
+.image-container,
+.thumbnail-container {
   position: relative;
 }
 
-.post-external-link {
+.post-external-link,
+.post-gallery-size {
   position: absolute;
   bottom: 0;
   left: 0;

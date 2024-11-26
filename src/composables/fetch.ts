@@ -36,11 +36,8 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
         for (const key in gallery_data) {
           if (gallery_data.hasOwnProperty(key)) {
             console.log(key + ": " + decodeURI(gallery_data[key].s.u));
+            gallery_image_urls.push(decodeURI(gallery_data[key].s.u));
           }
-        }
-
-        for (let i = 0; i < gallery_data.length; i++) {
-          gallery_image_urls.push(gallery_data[i].media_id);
         }
       } else if (is_video) {
         post_type = "TYPE_VIDEO";
@@ -59,7 +56,7 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
         }
       }
 
-      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, image_url, num_comments, post_type, video_url, external_link });
+      posts.push({ id, title, upvotes: ups, url: permalink, text: selftext, author, image_url, num_comments, post_type, video_url, external_link, gallery_image_urls });
     }
 
     const subreddit: Subreddit = {
