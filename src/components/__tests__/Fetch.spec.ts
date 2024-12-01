@@ -115,6 +115,7 @@ describe("fetch subreddit data", () => {
             video_url: "",
             external_link: "",
             image_url: "thumb1",
+            gallery_image_urls: [],
           },
         ],
       },
@@ -145,6 +146,7 @@ describe("fetch subreddit data", () => {
           video_url: "",
           external_link: "",
           image_url: "thumb2",
+          gallery_image_urls: [],
         },
       ],
     });
@@ -173,6 +175,7 @@ describe("fetch subreddit data", () => {
           video_url: "",
           external_link: "",
           image_url: "thumb3",
+          gallery_image_urls: [],
         },
       ],
     });
