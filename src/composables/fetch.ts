@@ -8,7 +8,7 @@ export async function fetchData(subredditName: string, sortBy: string = "best"):
   store.error = null;
   try {
     console.log(subredditName);
-    const response = await fetch(`https://www.reddit.com/r/${subredditName}/${sortBy}.json?include_over_18=false&limit=5&raw_json=1`);
+    const response = await fetch(`/.netlify/functions/reddit?subreddit=${subredditName}&sortBy=${sortBy}`);
     const result = await response.json();
 
     //console.log(result);
