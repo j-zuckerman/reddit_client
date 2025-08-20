@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Subreddit Form Submission", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
   });
 
   test("opens the modal, submits the form, and checks to see if the subreddit and posts exist", async ({ page }) => {

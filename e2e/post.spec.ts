@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Post Component Tests", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/", { waitUntil: "networkidle" });
   });
 
   test("should check initial state and toggle the post expansion", async ({ page }) => {
