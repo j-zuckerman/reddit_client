@@ -39,6 +39,7 @@
     "eslint-plugin-cypress": "^3.3.0",
     "eslint-plugin-vue": "^9.23.0",
     "jsdom": "^24.1.0",
+    "netlify-cli": "^23.1.4",
     "npm-run-all2": "^6.2.0",
     "start-server-and-test": "^2.0.13",
     "typescript": "~5.4.0",

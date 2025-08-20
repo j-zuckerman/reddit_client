@@ -71,7 +71,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "netlify dev --port=8888",
+    command: "npx netlify dev --port=8888",
     url: "http://localhost:8888",
     timeout: 60000,
     reuseExistingServer: !process.env.CI,
